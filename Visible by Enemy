@@ -1,0 +1,233 @@
+class PlayerList
+{
+public:
+IClientEntity* pLocalEz = hackManager.pLocal();
+class CPlayer
+{
+public:
+Vector ShootPos[125];
+int index = -1;
+IClientEntity* entity;
+Vector reset = Vector(0, 0, 0);
+float lastsim = 0;
+Vector lastorigin = Vector(0, 0, 0);
+std::vector< float > pastangles;
+int ScannedNumber = 0;
+int BestIndex = 0;
+float difference = 0.f;
+float Backtrack[360];
+float flLastPelvisAng = 0.f;
+float flEyeAng = 0.f;
+float resolved = 0.f;
+float posedifference = 0.f;
+Hitbox* box;
+CPlayer(IClientEntity* entity, int index, int lastsim) : entity(entity), index(index), lastsim(lastsim)
+{
+}
+};
+private:
+std::vector< CPlayer > Players;
+public:
+void Update()
+{
+for (int i = 0; i < Players.size(); i++)
+{
+if (Players.entity == nullptr)
+[*] {
+[*] Players.erase(Players.begin() + i);
+[*] continue;
+[*] }
+[*] if (Players.entity == pLocalEz)
+[*] {
+[*] Players.erase(Players.begin() + i);
+[*] continue;
+[*] };
+[*] }
+[*] }
+[*]
+[*] void UpdateSim()
+[*] {
+[*] Update();
+[*] for (int i = 0; i < Players.size(); i++)
+[*] {
+[*] Players.lastsim = Players.entity->GetSimulationTime();
+[*] }
+[*] }
+[*]
+[*] void AddPlayer(IClientEntity* ent)
+[*] {
+[*] Players.emplace_back(CPlayer(ent, ent->GetIndex(), ent->GetSimulationTime()));
+[*] }
+[*]
+[*] CPlayer* FindPlayer(IClientEntity* ent)
+[*] {
+[*] for (int i = 0; i < Players.size(); i++)
+[*] if (Players.index == ent->GetIndex())
+[*] return &Players;
+[*] AddPlayer(ent);
+[*] return FindPlayer(ent);
+[*] }
+[*]} plist;
+[*]
+[*]
+[*]
+[*]
+[*] // perfect resolver [censored] tapping
+[*] bool backtrackthis;
+[*] int velocity;
+[*]#define lerpticks rand() / 420 / velocity - 420 * 0
+[*]
+[*] class pEntity
+[*] {
+[*] public:
+[*] int ViewAngles;
+[*] int Velocity;
+[*] int LBY;
+[*] int EyeAngles;
+[*] bool InAir;
+[*] bool Forceatek;
+[*] int tickcount;
+[*] };
+[*]
+[*]
+[*] void BackTrack()
+[*] {
+[*] pEntity* pLocal;
+[*] pEntity* player;
+[*] player->tickcount = player->Velocity / lerpticks * 0 + 420 - player->ViewAngles;
+[*] }
+[*]
+[*] bool Baim;
+[*] bool HsOnly;
+[*] int BruteForce;
+[*] bool lbyexposed;
+[*] bool abouttoland;
+[*] int OldAngles;
+[*] float GetEyeAnglesXY;
+[*] float UnresolvedAngle[64]; //Can't combine with next statement because otherwise huge {}; with values.
+[*] float LBYEyeDelta; //This is for a later resolver that is not mine.
+[*] float FinalAngle[64]; //Value to set after resolving is done.
+[*] float MovingLBY[64]; //Value to be used if we can't resolve entity.
+[*] float StoredLBY[64]; //This will be compared to BrokenLBY.
+[*] float BlackListedAngles[64][3]; //A multidimensional array for blacklisting angles, will be reset upon round end.
+[*] float BrokenLBY[64]; //Value to be assigned if the entity is fakewalking.
+[*] float LowerBodyTargetToSubtract[64]; //This is for a later statement.
+[*] bool BrokenLBYHasValue[64]; //Failsafe to make sure we don't assign the entity's eye angles to a garbage value.
+[*] bool BlackListedAnglesHasValue[64][3]; //This must be multidimensional, as [0][0] might have a value, but [0][1] might not!
+[*] bool ResolvedStatus[64]; //If we log an animation based LBY update, we know for sure that we have resolved the entity (if the entity is using a static angle).
+[*] bool DidWeUseAnimation[64]; //For keeping track of the stupid number of sequence related variables.
+[*] static unsigned short BlackListCounter[64]; //This is for keeping track of the second digit in the multi dimensional arrays. Due to the nature of this, only the most recent blacklisted angle will not be shot at, it will suffice though
+[*] static unsigned short SequenceCounter[64]; //This is for keeping track of the subtraction of LowerBodyTargetToSubtract.
+[*]
+[*] namespace Menu
+[*] {
+[*] namespace Vars
+[*] {
+[*] bool BruteForce;
+[*] }
+[*] }
+[*] bool onground;
+[*] bool lbybroken;
+[*]
+[*]
+[*]
+[*]
+[*] void dab(Vector* & Angle, PlayerList::CPlayer* Player)
+[*] {
+[*] pEntity* pLocal;
+[*] pEntity* player;
+[*] Player->reset.y = Angle->y;
+[*] for (int i = 0; i < Interfaces::Engine->GetMaxClients(); ++i)
+[*] if (Menu::Window.RageBotTab.AdvancedResolver1.GetState())
+[*] //
+[*] if (player->InAir && !HsOnly) // if the ent is in air and its not hs only
+[*] {
+[*] Baim = true;
+[*] }
+[*] else if (player->InAir && HsOnly)
+[*] {
+[*] if (Menu::Vars::BruteForce)
+[*] {
+[*] BruteForce = true;
+[*] if (Angle->y != Player->resolved)
+[*] {
+[*] }
+[*] else
+[*] {
+[*] if (abouttoland) // about to land reached peak of jump
+[*] {
+[*] Sleep(2); // wait 2 seconds so they hit the ground and lby updates
+[*] pLocal->Forceatek = true; // fire
+[*] }
+[*] }
+[*] }
+[*] else
+[*] {
+[*] onground = true;
+[*] }
+[*]
+[*] if (lbyexposed)
+[*] {
+[*] pLocal->Forceatek = true;
+[*] }
+[*] else
+[*] {
+[*] int delta = player->ViewAngles - player->LBY;
+[*] if (delta > 29)
+[*] {
+[*] bool lbybroken;
+[*] lbybroken = true;
+[*] }
+[*]
+[*] if (onground)
+[*] {
+[*] if (player->Velocity > 0)
+[*] {
+[*] player->EyeAngles = player->LBY;
+[*] }
+[*] else
+[*] {
+[*] lbybroken = true;
+[*] }
+[*]
+[*]
+[*] if (lbybroken)
+[*] {
+[*] if (Menu::Vars::BruteForce)
+[*] {
+[*] BruteForce = true;
+[*] if (Globals::missedshots >= 1 && Globals::missedshots <= 1)
+[*] if (Angle->y != Player->resolved)
+[*] {
+[*] }
+[*] else
+[*] {
+[*] Sleep(1.1);
+[*] lbyexposed = true;
+[*] player->EyeAngles = OldAngles;
+[*] }
+[*] }
+[*]
+[*]
+[*] if (lbyexposed)
+[*] {
+[*] pLocal->Forceatek = true;
+[*] }
+[*] else
+[*] {
+[*] int delta = player->ViewAngles - player->LBY;
+[*] if (delta > 29)
+[*] {
+[*] bool lbybroken;
+[*] lbybroken = true;
+[*]
+[*] }
+[*]
+[*] if (lbybroken)
+[*] player->ViewAngles = player->ViewAngles + delta;
+[*] }
+[*] }
+[*] }
+[*] }
+[*] }
+[*] }
